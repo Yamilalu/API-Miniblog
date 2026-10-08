@@ -1,0 +1,244 @@
+openapi: 3.0.3
+info:
+  title: API MiniBlog
+  description: API REST para gestionar autores y posts de MiniBlog.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+tags:
+  - name: Authors
+    description: Operaciones relacionadas con autores
+  - name: Posts
+    description: Operaciones relacionadas con posts
+
+paths:
+
+  /authors:
+    get:
+      tags:
+        - Authors
+      summary: Obtener todos los autores
+      responses:
+        '200':
+          description: Lista de autores
+        '500':
+          description: Error interno del servidor
+
+    post:
+      tags:
+        - Authors
+      summary: Crear un autor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorInput'
+      responses:
+        '201':
+          description: Autor creado correctamente
+        '400':
+          description: Datos inválidos o email duplicado
+        '500':
+          description: Error interno del servidor
+
+  /authors/{id}:
+    get:
+      tags:
+        - Authors
+      summary: Obtener un autor por ID
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Autor encontrado
+        '404':
+          description: Autor no encontrado
+        '500':
+          description: Error interno del servidor
+
+    put:
+      tags:
+        - Authors
+      summary: Actualizar un autor
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorInput'
+      responses:
+        '200':
+          description: Autor actualizado
+        '400':
+          description: Datos inválidos o email duplicado
+        '404':
+          description: Autor no encontrado
+        '500':
+          description: Error interno del servidor
+
+    delete:
+      tags:
+        - Authors
+      summary: Eliminar un autor
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '204':
+          description: Autor eliminado correctamente
+        '404':
+          description: Autor no encontrado
+        '500':
+          description: Error interno del servidor
+
+  /posts:
+    get:
+      tags:
+        - Posts
+      summary: Obtener todos los posts
+      responses:
+        '200':
+          description: Lista de posts
+        '500':
+          description: Error interno del servidor
+
+    post:
+      tags:
+        - Posts
+      summary: Crear un post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostInput'
+      responses:
+        '201':
+          description: Post creado correctamente
+        '400':
+          description: Datos inválidos o autor inexistente
+        '500':
+          description: Error interno del servidor
+
+  /posts/{id}:
+    get:
+      tags:
+        - Posts
+      summary: Obtener un post por ID
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Post encontrado
+        '404':
+          description: Post no encontrado
+        '500':
+          description: Error interno del servidor
+
+    put:
+      tags:
+        - Posts
+      summary: Actualizar un post
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostInput'
+      responses:
+        '200':
+          description: Post actualizado
+        '400':
+          description: Datos inválidos o autor inexistente
+        '404':
+          description: Post no encontrado
+        '500':
+          description: Error interno del servidor
+
+    delete:
+      tags:
+        - Posts
+      summary: Eliminar un post
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '204':
+          description: Post eliminado correctamente
+        '404':
+          description: Post no encontrado
+        '500':
+          description: Error interno del servidor
+
+  /posts/author/{authorId}:
+    get:
+      tags:
+        - Posts
+      summary: Obtener posts de un autor
+      parameters:
+        - name: authorId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de posts del autor
+        '500':
+          description: Error interno del servidor
+
+components:
+
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: Identificador del recurso
+      schema:
+        type: integer
+        example: 1
+
+  schemas:
+
+    AuthorInput:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+          example: Ana García
+        email:
+          type: string
+          format: email
+          example: ana@example.com
+        bio:
+          type: string
+          example: Desarrolladora full-stack apasionada por Node.js
+
+    PostInput:
+      type: object
+      required:
+        - title
+        - content
+        - author_id
+      properties:
+        title:
+          type: string
+          example: Introducción a Node.js
+        content:
+          type: string
+          example: Node.js es un runtime de JavaScript.
+        author_id:
+          type: integer
+          example: 1
+        published:
+          type: boolean
+          example: true
