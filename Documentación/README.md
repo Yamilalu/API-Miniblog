@@ -165,7 +165,8 @@ Las credenciales y datos de conexión se configuran mediante variables de entorn
 El archivo `.env.example` contiene un ejemplo de las variables necesarias.
 
 ### URLs
+**Internal URL:** proporcionada por Railway para la comunicación interna entre servicios.
 
-**Internal URL:** será proporcionada por Railway según la configuración del servicio.
+**Public URL:** https://api-miniblog-production-a269.up.railway.app/
 
-**Public URL:** será generada por Railway al crear el dominio público del servicio.
+La API se encuentra desplegada y accesible mediante la URL pública.
